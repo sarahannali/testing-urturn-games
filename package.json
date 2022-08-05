@@ -6,7 +6,7 @@
   "scripts": {
     "start": "runner",
     "dev": "concurrently \"npm run dev:runner\" \"npm run dev:frontend\"",
-    "dev:runner": "runner --frontend-url localhost:3000",
+    "dev:runner": "runner --frontend-port 3000",
     "dev:frontend": "cd frontend && BROWSER=none npm start",
     "lint": "eslint . --ignore-path .gitignore --ext .js",
     "lint:fix": "eslint . --ignore-path .gitignore --ext .js --fix",
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/turnbasedgames/tictactoe#readme",
   "dependencies": {
-    "@urturn/runner": "0.0.1-dev6"
+    "@urturn/runner": "0.0.1-dev11"
   },
   "devDependencies": {
     "concurrently": "^7.1.0"
