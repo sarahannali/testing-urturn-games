@@ -27,6 +27,48 @@
  */
 
 /**
+ *  [row][col]
+ * [0] [
+[0]   [
+[0]     'red', 'red',
+[0]     'red', 'red',
+[0]     'red', 'red',
+[0]     null
+[0]   ],
+[0]   [
+[0]     null, null,
+[0]     null, null,
+[0]     null, null,
+[0]     null
+[0]   ],
+[0]   [
+[0]     null, null,
+[0]     null, null,
+[0]     null, null,
+[0]     null
+[0]   ],
+[0]   [
+[0]     null, null,
+[0]     null, null,
+[0]     null, null,
+[0]     null
+[0]   ],
+[0]   [
+[0]     null, null,
+[0]     null, null,
+[0]     null, null,
+[0]     null
+[0]   ],
+[0]   [
+[0]     null, null,
+[0]     null, null,
+[0]     null, null,
+[0]     null
+[0]   ]
+[0] ]
+ */
+
+/**
  * onRoomStart
  * @returns {BoardGameResult}
  */
@@ -70,10 +112,10 @@ function getPlayerColor(player, players) {
  * @returns -1 if no possible y value (e.g. the column is filled), 
  * returns the proper y value for when placing a chip
  */
-function getYFromX(board, x) {
-  for(let y = 0; y < 6; y++){
-    if(board[x][y] === null) {
-      return y
+function getRowNumFromCol(board, colNum) {
+  for(let rowNum = 5; rowNum >= 0; rowNum--){
+    if(board[rowNum][colNum] === null) {
+      return rowNum
     }
   }
   return -1
@@ -96,20 +138,22 @@ function onPlayerMove(player, move, boardGame) {
   const { state, players } = boardGame
   const { board, playerToMoveIndex } = state;
 
-  const { x } = move;
-  const y = getYFromX(board, x);
-  if (y === -1) {
+  const { colNum } = move;
+  const rowNum = getRowNumFromCol(board, colNum);
+  console.log("MOVE", rowNum, colNum)
+  if (rowNum === -1) {
     throw new Error("Player cannot mover here");
   }
 
   const playerColor = getPlayerColor(player, players);
-  board[x, y] = playerColor;
-  const [isEnd, winner] = isEndGame(board, players);
+  board[rowNum][colNum] = playerColor;
+  console.log(board)
+  // const [isEnd, winner] = isEndGame(board, players);
 
-  if (isEnd) {
-    state.winner = winner;
-    return { state, finished: true};
-  }
+  // if (isEnd) {
+  //   state.winner = winner;
+  //   return { state, finished: true};
+  // }
   return { state };
 }
 

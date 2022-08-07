@@ -39,7 +39,7 @@ function App() {
                     }}
                     onClick={async (event) => {
                       event.preventDefault();
-                      const move = { x: rowNum};
+                      const move = { colNum };
                       await client.makeMove(move);
                     }}
                   >
