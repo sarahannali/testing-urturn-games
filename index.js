@@ -32,41 +32,93 @@
  */
 function onRoomStart() {
   console.log("onRoomStart")
-  return {};
+  return {
+    state: {
+      board: Array(6).fill().map(()=>Array(7).fill(null)), // thanks mr. stackoverflow
+      winner: null
+    }
+  };
 }
 
 /**
  * onPlayerJoin
  * @param {Player} player, represents the player that is attempting to join this game
- * @param {BoardGame} currentGame
+ * @param {BoardGame} boardGame
  * @returns {BoardGameResult}
  */
 function onPlayerJoin(player, boardGame) {
   console.log("onPlayerJoin", player, boardGame)
-  return {};
+  const { players } = boardGame; // why 
+
+  if(players.length == 2) {
+    return { joinable: false};
+  }
+  return {}; // am i returning nothing
+}
+
+function getPlayerColor(player, players) { // not my logic
+  if (player.id === players[0].id) {
+    return "red"
+  }
+  return "blue"
+}
+
+function isEndGame(board, players) {
+  function getPlayerFromColor(color, players) { // not my logic
+    return color === "red" ? players[0] : players[1];
+  }
+}
+
+
+for (let i = 0; i < board.length; i += 1) {
+  const row = board[i];
+  if (i < 7) {
+    const col = [board[i][i], board[i][i], board[i], board[i][i], board[i][i][board[i][i]]]; // there must be a better way to do this
+  }
 }
 
 /**
  * onPlayerMove
  * @param {Player} player, the player that is attempting to make a move
  * @param {*} move json object, controlled the creator that represents the player's move
- * @param {BoardGame} currentGame
+ * @param {BoardGame} boardGame
  * @returns {BoardGameResult}
  */
 function onPlayerMove(player, move, boardGame) {
-  console.log("onPlayerJoin", player, move, boardGame)
-  return {};
+  console.log("onPlayerJoin", player, move, boardGame);
+
+  const { state, players } = boardGame
+  const { board, playerToMoveIndex } = state;
+
+  const { x, y } = move;
+
+  const playerColor = getPlayerColor(player, players);
+  board[x, y] = playerColor;
+
+  const [isEnd, winner ] = isEndGame(board, players);
+
+  if (isEnd) {
+    state.winner = winner;
+    return { state, finished: true};
+  }
+  return { state };
 }
 
 /**
  * onPlayerQuit
  * @param {Player} player, the player that is attempting to quit the game
- * @param {BoardGame} currentGame
+ * @param {BoardGame} boardGame
  * @returns {BoardGameResult}
  */
 function onPlayerQuit(player, boardGame) {
-  console.log("onPlayerQuit", player, boardGame)
-  return {};
+  console.log("onPlayerQuit", player, boardGame);
+
+  if(players.length === 1) {
+    const [winner] = players;
+    state.winner = winner;
+    return { state, joinable: false, finished: true };
+  }
+  return { joinable: false, finished: true };
 }
 
 module.exports = {
