@@ -134,6 +134,9 @@ function isEndGame(board, players) {
  */
 function onPlayerMove(player, move, boardGame) {
   console.log("onPlayerMove", player, move, boardGame);
+  // if (boardGame.players.length !== 2) {
+  //   throw new Error("Game not in progress");
+  // }
 
   const { state, players } = boardGame
   const { board, playerToMoveIndex } = state;
