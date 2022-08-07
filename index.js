@@ -69,14 +69,6 @@ function isEndGame(board, players) {
   }
 }
 
-
-for (let i = 0; i < board.length; i += 1) {
-  const row = board[i];
-  if (i < 7) {
-    const col = [board[i][i], board[i][i], board[i], board[i][i], board[i][i][board[i][i]]]; // there must be a better way to do this
-  }
-}
-
 /**
  * onPlayerMove
  * @param {Player} player, the player that is attempting to make a move
@@ -96,6 +88,22 @@ function onPlayerMove(player, move, boardGame) {
   board[x, y] = playerColor;
 
   const [isEnd, winner ] = isEndGame(board, players);
+
+  // kevin
+  xLeft = max(0, x - 3);
+  xRight = max(0, x + 3);
+
+  // horizontal
+  colorCount = 0;
+
+  // futile checking
+  for(i = x; i > xLeft; i++) {
+    if(board[i][y] == "red") {
+      colorCount += 1;
+    } else {
+      colorCount = 0;
+    }
+  }
 
   if (isEnd) {
     state.winner = winner;
