@@ -56,17 +56,31 @@ function onPlayerJoin(player, boardGame) {
   return {}; // am i returning nothing
 }
 
-function getPlayerColor(player, players) { // not my logic
+function getPlayerColor(player, players) {
   if (player.id === players[0].id) {
     return "red"
   }
   return "blue"
 }
 
-function isEndGame(board, players) {
-  function getPlayerFromColor(color, players) { // not my logic
-    return color === "red" ? players[0] : players[1];
+/**
+ * getYFromX
+ * @param {*} board 
+ * @param {*} x 
+ * @returns -1 if no possible y value (e.g. the column is filled), 
+ * returns the proper y value for when placing a chip
+ */
+function getYFromX(board, x) {
+  for(let y = 0; y < 6; y++){
+    if(board[x][y] === null) {
+      return y
+    }
   }
+  return -1
+}
+
+function isEndGame(board, players) {
+  return [null, null]
 }
 
 /**
@@ -77,33 +91,20 @@ function isEndGame(board, players) {
  * @returns {BoardGameResult}
  */
 function onPlayerMove(player, move, boardGame) {
-  console.log("onPlayerJoin", player, move, boardGame);
+  console.log("onPlayerMove", player, move, boardGame);
 
   const { state, players } = boardGame
   const { board, playerToMoveIndex } = state;
 
-  const { x, y } = move;
+  const { x } = move;
+  const y = getYFromX(board, x);
+  if (y === -1) {
+    throw new Error("Player cannot mover here");
+  }
 
   const playerColor = getPlayerColor(player, players);
   board[x, y] = playerColor;
-
-  const [isEnd, winner ] = isEndGame(board, players);
-
-  // kevin
-  xLeft = max(0, x - 3);
-  xRight = max(0, x + 3);
-
-  // horizontal
-  colorCount = 0;
-
-  // futile checking
-  for(i = x; i > xLeft; i++) {
-    if(board[i][y] == "red") {
-      colorCount += 1;
-    } else {
-      colorCount = 0;
-    }
-  }
+  const [isEnd, winner] = isEndGame(board, players);
 
   if (isEnd) {
     state.winner = winner;
